@@ -1,3 +1,5 @@
+SHIROMU v1.1
+
 For more information, please visit:
 Discord - https://discord.gg/ZAfg7YxSVE
 По всем вопросам в дискорд: https://discord.gg/ZAfg7YxSVE
@@ -10,5 +12,5 @@ Discord - https://discord.gg/ZAfg7YxSVE
 Установка на Windows: 
 1. Code - скачать zip-архив
 2. Разархивировать SHIROMU
-3. Открыть dist
+3. Открыть dist/main
 4. Запустить main.exe
