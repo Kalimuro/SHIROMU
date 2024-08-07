@@ -1,4 +1,5 @@
-
+import os
+from os import system
 import requests
 import phonenumbers
 from phonenumbers import timezone
@@ -11,6 +12,15 @@ from faker import Faker
 from colorama import Fore, init
 from art import *
 
+system('pip3 install requests')
+system('pip3 install phonenumbers')
+system('pip3 install instaloader')
+system('pip3 install socket')
+system('pip3 install pyautogui')
+system('pip3 install time')
+system('pip3 install faker')
+system('pip3 install colorama')
+system('pip3 install art')
 
 init()
 
