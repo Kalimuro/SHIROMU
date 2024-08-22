@@ -1,0 +1,10 @@
+pyinstaller
+requests
+phonenumbers
+instaloader
+socket
+pyautogui
+time
+faker
+colorama
+art
