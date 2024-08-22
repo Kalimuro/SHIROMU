@@ -252,3 +252,70 @@ while True:
 
     if vd == 17:
         print("В разработке...")
+
+    if vd == 18:
+        API = 'https://www.1secmail.com/api/v1/'
+        domains = ["1secmail.com", "1secmail.org", "1secmail.net", "wwjmp.com", "esiix.com", "xojxe.com", "yoggm.com"]
+        domain = random.choice(domains)
+
+
+        def create_username():
+            usrname = string.ascii_lowercase + string.digits
+            username = ''.join(random.choice(usrname) for i in range(10))
+            return username
+
+
+        def check_mail(mail=''):
+            req_link = f'{API}?action=getMessages&login={mail.split("@")[0]}&domain={mail.split("@")[1]}'
+            r = requests.get(req_link).json()
+            leghth = len(r)
+
+            if leghth == 0:
+                print('Пусто :(, обновляется каждые 5 сек')
+            else:
+                id_list = []
+
+                for i in r:
+                    for k, v in i.items():
+                        if k == 'id':
+                            id_list.append(v)
+                print(f'{leghth} сообщений. Обновляется каждые 5 сек')
+                current_dir = os.getcwd()
+                final_dir = os.path.join(current_dir, 'all_mails')
+                if not os.path.exists(final_dir):
+                    os.makedirs(final_dir)
+
+                for i in id_list:
+                    read_msg = f'{API}?action=readMessage&login={mail.split("@")[0]}&domain={mail.split("@")[1]}&id={i}'
+                    r = requests.get(read_msg).json()
+
+                    sender = r.get('from')
+                    subject = r.get('subject')
+                    date = r.get('date')
+                    content = r.get('textBody')
+
+                    mail_file_path = os.path.join(final_dir, f'{i}.txt')
+
+                    with open(mail_file_path, 'w') as file:
+                        file.write(
+                            f'Отправитель: {sender}\nНа анон почту: {mail}\nФайлы: {subject}\nДата: {date}\nСодержимое:{content}')
+
+
+        def main():
+            try:
+                username = create_username()
+                mail = f'{username}@{domain}'
+                print(f'Временная анон почта: {mail}')
+
+                mail_req = requests.get(f'{API}?login={mail.split("@")[0]}&domain={mail.split("@")[1]}')
+
+                while True:
+                    check_mail(mail=mail)
+                    time.sleep(5)
+
+            except(KeyboardInterrupt):
+                print("Прервано")
+
+
+        if __name__ == '__main__':
+            main()
