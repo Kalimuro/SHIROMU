@@ -14,9 +14,10 @@ from colorama import Fore, init
 from art import *
 import random
 import string
-
-
-
+import smtplib
+import webbrowser
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 
 init()
@@ -25,30 +26,26 @@ while True:
 
     tprint("SHIROMU")
 
-    print(Fore.BLUE + "[1] Поиск по номеру телефона" + Fore.RESET)
-    print(Fore.BLUE + "[2] Поиск по электронгой почте(осинт)" + Fore.RESET)
-    print(Fore.BLUE + "[3] Поиск по номеру документа(осинт)" + Fore.RESET)
-    print(Fore.BLUE + "[4] Поиск по адресу(осинт)" + Fore.RESET)
-    print(Fore.BLUE + "[5] Поиск по IP адресу" + Fore.RESET)
-    print(Fore.BLUE + '[6] Поиск по Instagram' + Fore.RESET)
-    print(Fore.BLUE + "[7] Информация о софте" + Fore.RESET)
-    print(Fore.BLUE + "[8] Поиск IP-адреса по домену" + Fore.RESET)
-    print(Fore.BLUE + "[9] Спамер" + Fore.RESET)
-    print(Fore.BLUE + "[10] Сканер портов" + Fore.RESET)
-    print(Fore.BLUE + "[11]Создание фейк-личности" + Fore.RESET)
-    print(Fore.BLUE + '[12]Поиск по никнейму' + Fore.RESET)
-    print(Fore.BLUE + '[13]Поиск по ФИО' + Fore.RESET)
-    print(Fore.BLUE + "[14] SMS-бомбер" + Fore.RESET)
-    print(Fore.BLUE + "[15] Мануалы" + Fore.RESET)
-    print(Fore.BLUE + "[16] Снос тг акков (новая функция)")
-    print(Fore.BLUE + "[17] Снос тгк (новая функция)")
-    print(Fore.BLUE + "[18] Временная анон почта(новая функция)")
-    print(Fore.BLUE + "[esc] Выход" + Fore.RESET)
+    print(Fore.BLUE + "├─ Разработчик - Sh1ro " + Fore.RESET)
+    print(Fore.BLUE + "├─ Discord - https://discord.gg/ZAfg7YxSVE" + Fore.RESET)
+    print(Fore.BLUE + "├─          ┌─────────────────┐                        ┌───────────────────┐                           ┌───────────┐            │" + Fore.RESET)
+    print(Fore.BLUE + "└─┬─────────┤      ОСИНТ      ├─────────┬──────────────┤ Сканирование сети ├──────────────┬────────────┤ УРОН      ├────────────┴─" + Fore.RESET)
+    print(Fore.BLUE + "  │         └─────────────────┘         │              └───────────────────┘              │            └───────────┘" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [01] Поиск по номеру телефона      ├─ [07] Поиск по IP адресу                        ├─ [14] Спамер" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [02] Поиск по эл.почте             ├─ [08] Поиск IP-адреса по домену                 ├─ [15] SMS-бомбер" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [03] Поиск по номеру документа     ├─ [09] Сканирование портов                       ├─ [16]Снос тг аккаунтов" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [10] В разработке...                           ├─ [17]Снос тгк" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [05] Поиск по Instagram            ├─ [11] В разработке...                           ├─ [18]Снос сессии" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [06] Поиск по ФИО                  ├─ [12] В разработке...                           └─ [19] след.страница ->>" + Fore.RESET)
+    print(Fore.BLUE + "  └─ [52] Поиск по никнейму" + Fore.RESET)
+    print(Fore.BLUE + "                                        └─ [13] В разработке...                 ")
 
     vd = int(input("Выберите действие: "))
 
     if vd == 1:
+
         phone_number = input("Введите номер телефона(формат: +79304669445): ")
+
         if phone_number is False:
             print("Неверно введен номер")
         else:
@@ -71,6 +68,14 @@ while True:
                 print("Номер активен")
             else:
                 print("Номер не активен")
+
+        print("Тг: t.me/" + phone_number)
+        print("WhatsApp: wa.me/" + phone_number)
+        print("Вайбер: viber.click/" + phone_number)
+        print("Фэйсбук: m.me/" + phone_number)
+        print("Возможные имена: gogtc.co/search/" + phone_number)
+        print("Упоминания в соцсетях: https://cse.google.com/cse?cx=006976128084956795641:ad1xj14zfap&q=" + phone_number)
+        print("Дополнительная информация: https://search.0t.rocks/records?phoneNumbers=" + phone_number)
 
     if vd == 2:
         print('Этой информации еще нет в базе, ожидайте обновлений...')
@@ -97,7 +102,7 @@ while True:
         if found1 is False:
             print("Информации еще нету в базе данных, либо что-то введено не корректно")
 
-    if vd == 5:
+    if vd == 7:
         def get_info_by_ip(ip="127.0.0.1"):
             try:
                 response = requests.get(url=f'http://ip-api.com/json/{ip}').json()
@@ -123,14 +128,14 @@ while True:
         if __name__ == '__main__':
             main()
 
-    if vd == 6:
+    if vd == 5:
         il = instaloader.Instaloader()
 
         name = input("Введите username таргета: ")
         profile = instaloader.Profile.from_username(il.context, username=name)
         print(f'Информация о профиле: {name}\n {profile.biography}\n Постов: {profile.mediacount}\nПодписчиков: {profile.followers}')
 
-    if vd == 7:
+    if vd == 20:
         print("SHIROMU находится на стадии бета-теста и постоянно обновляется.")
         print("Вскоре будут постепенно добавляться новые функции софта, ожидайте")
         print("Данная версия абсолютно бесплатная, предназначена для общего использования и поиска информации по открытым"
@@ -154,7 +159,7 @@ while True:
         if __name__ == "__main__":
             main()
 
-    if vd == 9:
+    if vd == 14:
 
         def SendMessage():
             message = input("Паста для спама: ")
@@ -169,7 +174,7 @@ while True:
                 pyautogui.press("enter")
         SendMessage()
 
-    if vd == 10:
+    if vd == 9:
         def is_port_open(host, port):
             s = socket.socket()
             try:
@@ -186,7 +191,7 @@ while True:
             else:
                 print(f"[!] {host}:{port} закрыт", end="\r")
 
-    if vd == 11:
+    if vd == 26:
         faker = Faker('RU')
         name = faker.name()
         adress = faker.address()
@@ -196,10 +201,10 @@ while True:
         pasport = faker.passport_number()
         print(f'Имя: {name}\nАдрес:{adress}\nЭл.почта:{email}\nНомер телефона:{phone}\nРабота:{job}\nПаспорт:{pasport}')
 
-    if vd == 12:
+    if vd == 52:
         print('В разработке... Пока что используйте Sherlock')
 
-    if vd == 13:
+    if vd == 6:
         query = input("Введите ФИО: ")
         found2 = False
         with open('freedb1.txt', 'r') as file:
@@ -210,7 +215,7 @@ while True:
         if found2 is False:
             print("информации еще нет в базе данных, или что то введено не корректно ")
 
-    if vd == 14:
+    if vd == 15:
         phone = input('Введите номер таргета(формат 79009945209): ')
         phone9 = phone[1:]
         while True:
@@ -225,7 +230,7 @@ while True:
             except:
                 print('Произошла какая-то ошибка, скорее всего sh1ro еблан и не обновил API-шник')
 
-    if vd == 15:
+    if vd == 21:
 
         print(Fore.RED + "[81] Стартовый мануал по ОСИНТУ")
         print(Fore.RED + "[82] Мануал по сносу тг")
@@ -248,12 +253,15 @@ while True:
 
 
     if vd == 16:
-        print("В разработке...")
+        print("Доступно бесплатно в exe-версии, можно взять в discord канале софта")
 
     if vd == 17:
-        print("В разработке...")
+        print("Доступно в платной версии SHIROMU в exe-версии, подробнее в discord канале")
 
     if vd == 18:
+        print("Доступно в платной версии SHIROMU в exe-версии, подробнее в discord канале")
+
+    if vd == 27:
         API = 'https://www.1secmail.com/api/v1/'
         domains = ["1secmail.com", "1secmail.org", "1secmail.net", "wwjmp.com", "esiix.com", "xojxe.com", "yoggm.com"]
         domain = random.choice(domains)
@@ -319,3 +327,14 @@ while True:
 
         if __name__ == '__main__':
             main()
+
+    if vd == 19:
+        print(Fore.BLUE + "            ┌────────────────────┐                        ┌─────────────┐" + Fore.RESET)
+        print(Fore.BLUE + "  ┬─────────┤ Информация/полезное├─────────┬──────────────┤ Анонимность ├┴─│" + Fore.RESET)
+        print(Fore.BLUE + "  │         └────────────────────┘         │              └─────────────┘  │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [20] Информация о софте               ├─ [26] Создание фейк-личности  │ " + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [21] Мануалы                          ├─ [27] Временная анон-почта    │      " + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [22] В разработке...                  ├─ [28] В разработке...         │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [23] В разработке...                  ├─ [29] В разработке...         │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [24] В разработке...                  ├─ [30] В разработке...         │" + Fore.RESET)
+        print(Fore.BLUE + "  └─ [25] В разработке...                  ├─ [31] В разработке...         │      " + Fore.RESET)
