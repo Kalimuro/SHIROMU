@@ -1,6 +1,4 @@
 import os
-import subprocess
-from os import system
 import requests
 import phonenumbers
 from phonenumbers import timezone
@@ -14,10 +12,6 @@ from colorama import Fore, init
 from art import *
 import random
 import string
-import smtplib
-import webbrowser
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from smscallbomber import SMSCallBomber
 import threading
 from argparse import Namespace
@@ -208,7 +202,7 @@ while True:
         print(f'Имя: {name}\nАдрес:{adress}\nЭл.почта:{email}\nНомер телефона:{phone}\nРабота:{job}\nПаспорт:{pasport}')
 
     if vd == 52:
-        print('В разработке... Пока что используйте Sherlock')
+        print('Доступно в платной версии SHIROMU')
 
     if vd == 6:
         query = input("Введите ФИО: ")
