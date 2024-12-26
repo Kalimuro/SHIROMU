@@ -1,4 +1,4 @@
-SHIROMU v2.1
+SHIROMU v2.2
 
 For more information, please visit: Discord - https://discord.gg/ZAfg7YxSVE По всем вопросам в дискорд: https://discord.gg/ZAfg7YxSVE
 
