@@ -15,7 +15,14 @@ import string
 from smscallbomber import SMSCallBomber
 import threading
 from argparse import Namespace
+from bs4 import BeautifulSoup
 
+import doxpastecreate
+from darklinks import *
+import darklinks
+from doxpastecreate import *
+
+os.system('cls' if os.name == 'nt' else 'clear')
 
 init()
 
@@ -33,9 +40,9 @@ while True:
     print(Fore.BLUE + "  ├─ [03] Поиск по номеру документа     ├─ [09] Сканирование портов                       ├─ [16] Снос тг аккаунтов" + Fore.RESET)
     print(Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [10] В разработке...                           ├─ [17] Снос тгк" + Fore.RESET)
     print(Fore.BLUE + "  ├─ [05] Поиск по Instagram            ├─ [11] В разработке...                           ├─ [18] Снос сессии" + Fore.RESET)
-    print(Fore.BLUE + "  ├                                     ├                                                 ├─ [78] Разбан номера в тг"+ Fore.RESET)
-    print(Fore.BLUE + "  ├                                     ├                                                 ├─ [91] Снос своим текстом" + Fore.RESET)
-    print(Fore.BLUE + "  ├                                     ├                                                 ├─ [93] Снос через сайт" + Fore.RESET)
+    print(Fore.BLUE + "  ├  [31] Doxbin парсер                 ├                                                 ├─ [78] Разбан номера в тг"+ Fore.RESET)
+    print(Fore.BLUE + "  ├  [30] Даркнет ссылки                ├                                                 ├─ [91] Снос своим текстом" + Fore.RESET)
+    print(Fore.BLUE + "  ├  [32] Составить итоговую пасту      ├                                                 ├─ [93] Снос через сайт" + Fore.RESET)
     print(Fore.BLUE + "  ├─ [06] Поиск по ФИО                  ├─ [12] В разработке...                           └─ [19] след.страница ->>" + Fore.RESET)
     print(Fore.BLUE + "  └─ [52] Поиск по никнейму" + Fore.RESET)
     print(Fore.BLUE + "                                        └─ [13] В разработке...                 ")
@@ -78,7 +85,7 @@ while True:
         print("Дополнительная информация: https://search.0t.rocks/records?phoneNumbers=" + phone_number)
 
     if vd == 2:
-        print('Этой информации еще нет в базе, ожидайте обновлений...')
+        print('Доступно в полной версии SHIROMU, пишите Sh1ro в discord')
 
     if vd == 3:
         query = input("Введите номер гос.документа: ")
@@ -142,8 +149,6 @@ while True:
               " источникам")
         print("Поиск может иногда занимать продолжительное время(от 1 до 5 минут).")
         print( "Если у вас имеются какие-то вопросы/предложения, можете задать их в дискорд канале")
-        print("База данных пока что не включена в эту версию, так что на данный момент это просто osint тулка, следите за"
-              " обновлениями в дискорд канале - https://discord.gg/ZAfg7YxSVE" )
         print("Для осуществления поиска по документам, ФИО/ФИ, почте, адресу вам необходимо прокинуть базу данных весом"
               "в 5 гб. Ее вы можете взять в дискорд канале. ")
 
@@ -356,8 +361,59 @@ while True:
         print(Fore.BLUE + "  ┬─────────┤ Информация/полезное├─────────┬──────────────┤ Анонимность ├┴─│" + Fore.RESET)
         print(Fore.BLUE + "  │         └────────────────────┘         │              └─────────────┘  │" + Fore.RESET)
         print(Fore.BLUE + "  ├─ [20] Информация о софте               ├─ [26] Создание фейк-личности  │ " + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [21] Мануалы                          ├─ [27] Временная анон-почта    │      " + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [21] Мануалы                          ├─ [27] Временная анон-почта    │ " + Fore.RESET)
         print(Fore.BLUE + "  ├─ [22] В разработке...                  ├─ [28] В разработке...         │" + Fore.RESET)
         print(Fore.BLUE + "  ├─ [23] В разработке...                  ├─ [29] В разработке...         │" + Fore.RESET)
         print(Fore.BLUE + "  ├─ [24] В разработке...                  ├─ [30] В разработке...         │" + Fore.RESET)
-        print(Fore.BLUE + "  └─ [25] В разработке...                  ├─ [31] В разработке...         │      " + Fore.RESET)
+        print(Fore.BLUE + "  └─ [25] В разработке...                  ├─ [11] Следующая страница ->   │ " + Fore.RESET)
+
+
+    if vd == 31:
+        def doxbin_parser(url):
+            if requests.get(url).status_code == 404:
+                print('Ничего не найдено')
+
+            else:
+                siilka = requests.get(url)
+                soup = BeautifulSoup(siilka.text, 'html.parser')
+                dox = soup.find_all('div')
+                for text1 in dox:
+                    print(text1.text)
+
+        if __name__ == '__main__':
+            while True:
+                name_pasta = input('Введите информацию, которую вы уже знаете о таргете: ').replace(
+                    '_', '')
+                name_pasta = name_pasta.replace(' ', '')
+                if name_pasta == '':
+                    print('Некорректно введена информация... ')
+                else:
+                    doxbin_parser(f'https://doxbin.org/upload/{name_pasta}')
+
+    if vd == 30:
+        print_darklist(darklist)
+
+    if vd == 32:
+        doxpastecreate.main()
+
+    if vd == 11:
+        print(Fore.BLUE + "            ┌────────────────────┐                        " + Fore.RESET)
+        print(Fore.BLUE + "  ┬─────────┤     OSINT VK       ├──────────────────────│────────[УРОН ВК]──────────│" + Fore.RESET)
+        print(Fore.BLUE + "  │         └────────────────────┘                      ├─  [33] Снос за оск        │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [22] Проверить время онлайна и устройства          ├─  [34] Снос своим текстом │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [23] Id групп пользователя(за все время)           ├─                          │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [24] Id Фотографий таргета                         ├─                          │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [25] Id Страниц друзей жертвы                      ├─                          │" + Fore.RESET)
+        print(Fore.BLUE + "  ├─ [28] Посмотреть комментарии таргета                ├─                          │" + Fore.RESET)
+        print(Fore.BLUE + "  └─ [29] Поиск номера телефона                         ├─                          │" + Fore.RESET)
+
+
+
+    if vd in range(22, 29):
+        print('Доступно в полной версии SHIROMU, подробнее пишите sh1ro в discord')
+
+    elif vd == 33:
+        print('Доступно в полной версии SHIROMU, подробнее пишите sh1ro в discord')
+
+    elif vd == 34:
+        print('Доступно в полной версии SHIROMU, подробнее пишите sh1ro в discord')
