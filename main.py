@@ -1,386 +1,247 @@
-import os
-import requests
-import phonenumbers
-from phonenumbers import timezone
-from phonenumbers import geocoder, carrier
-import instaloader
-import socket
-import pyautogui
-import time
-from faker import Faker
-from colorama import Fore, init
-from art import *
-import random
-import string
+import localdb.localdbsearch
+import utils.phonenumber_search as pn
+from utils.imports import *
+from utils import doxpastecreate
+from utils.darklinks import *
+from Config.func_comments_return import *
+from utils.ip_osint import get_info_by_ip, get_ip_by_hostname
+from utils import create_fake_paste
+from utils import all_parsers
+from allbanners import banner1, banner2, banner3
 from smscallbomber import SMSCallBomber
-import threading
-from argparse import Namespace
-from bs4 import BeautifulSoup
-
-import doxpastecreate
-from darklinks import *
-import darklinks
-from doxpastecreate import *
+from localdb import *
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
+
+class leave_from_tool:
+    def __init__(self):
+        pass
+
+    def leave(self, vd):
+        if vd == 0:
+            print('Завершиние работы...')
+            return True
+        return False
+
+
+def init():
+    pass
+
+
 init()
 
+lf = leave_from_tool()
+
 while True:
+    try:
 
-    tprint("SHIROMU")
+        banner1.banner_one()
 
-    print(Fore.BLUE + "├─ Разработчик - Sh1ro " + Fore.RESET)
-    print(Fore.BLUE + "├─ Discord - https://discord.gg/ZAfg7YxSVE" + Fore.RESET)
-    print(Fore.BLUE + "├─          ┌─────────────────┐                        ┌───────────────────┐                           ┌───────────┐            │" + Fore.RESET)
-    print(Fore.BLUE + "└─┬─────────┤      ОСИНТ      ├─────────┬──────────────┤ Сканирование сети ├──────────────┬────────────┤ УРОН      ├────────────┴─" + Fore.RESET)
-    print(Fore.BLUE + "  │         └─────────────────┘         │              └───────────────────┘              │            └───────────┘" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [01] Поиск по номеру телефона      ├─ [07] Поиск по IP адресу                        ├─ [14] Спамер" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [02] Поиск по эл.почте             ├─ [08] Поиск IP-адреса по домену                 ├─ [15] SMS-бомбер" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [03] Поиск по номеру документа     ├─ [09] Сканирование портов                       ├─ [16] Снос тг аккаунтов" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [10] В разработке...                           ├─ [17] Снос тгк" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [05] Поиск по Instagram            ├─ [11] В разработке...                           ├─ [18] Снос сессии" + Fore.RESET)
-    print(Fore.BLUE + "  ├  [31] Doxbin парсер                 ├                                                 ├─ [78] Разбан номера в тг"+ Fore.RESET)
-    print(Fore.BLUE + "  ├  [30] Даркнет ссылки                ├                                                 ├─ [91] Снос своим текстом" + Fore.RESET)
-    print(Fore.BLUE + "  ├  [32] Составить итоговую пасту      ├                                                 ├─ [93] Снос через сайт" + Fore.RESET)
-    print(Fore.BLUE + "  ├─ [06] Поиск по ФИО                  ├─ [12] В разработке...                           └─ [19] след.страница ->>" + Fore.RESET)
-    print(Fore.BLUE + "  └─ [52] Поиск по никнейму" + Fore.RESET)
-    print(Fore.BLUE + "                                        └─ [13] В разработке...                 ")
+        vd = int(input("Выберите действие: "))
 
-    vd = int(input("Выберите действие: "))
+        if lf.leave(vd):
+            break
 
-    if vd == 1:
+        if vd == 1:
+            phone_number = input("Введите номер телефона(формат: +79304669445): ")
+            pn.get_phone_number_info(phone_number)
 
-        phone_number = input("Введите номер телефона(формат: +79304669445): ")
-
-        if phone_number is False:
-            print("Неверно введен номер")
-        else:
-            x = phonenumbers.parse(phone_number)
-            timezone = timezone.time_zones_for_number(x)
-            Carrier = carrier.name_for_number(x, "ru")
-            Region = geocoder.description_for_number(x, "ru")
-            valid = phonenumbers.is_valid_number(x)
-            possible = phonenumbers.is_possible_number(x)
-
-            print("Оператор: ", Carrier)
-            print(x)
-            print("Часовой пояс: ", timezone)
-
-            if valid is True:
-                print("Номер валидный")
-            else:
-                print("Номер не валидный")
-            if possible is True:
-                print("Номер активен")
-            else:
-                print("Номер не активен")
-
-        print("Тг: t.me/" + phone_number)
-        print("WhatsApp: wa.me/" + phone_number)
-        print("Вайбер: viber.click/" + phone_number)
-        print("Фэйсбук: m.me/" + phone_number)
-        print("Возможные имена: gogtc.co/search/" + phone_number)
-        print("Упоминания в соцсетях: https://cse.google.com/cse?cx=006976128084956795641:ad1xj14zfap&q=" + phone_number)
-        print("Дополнительная информация: https://search.0t.rocks/records?phoneNumbers=" + phone_number)
-
-    if vd == 2:
-        print('Доступно в полной версии SHIROMU, пишите Sh1ro в discord')
-
-    if vd == 3:
-        query = input("Введите номер гос.документа: ")
-        found = True
-        with open('freedb1.txt', 'r', encoding="utf-8") as file:
-            for line in file:
-                if query in line:
-                    print(line)
-                    found = True
-        if found is False:
-            print('Информации еще нету в базе данных, либо что-то введено не корректно')
-
-    if vd == 4:
-        query = input("Введите адрес: ")
-        found1 = True
-        with open('freedb1.txt', 'r', encoding="utf-8") as file:
-            for line in file:
-                if query in line:
-                    print(line)
-                    found = True
-        if found1 is False:
-            print("Информации еще нету в базе данных, либо что-то введено не корректно")
-
-    if vd == 7:
-        def get_info_by_ip(ip="127.0.0.1"):
+        if vd == 2:
+            z = input('Введите информацию о таргете: ')
             try:
-                response = requests.get(url=f'http://ip-api.com/json/{ip}').json()
-                data = {
-                    '[IP]': response.get('query'),
-                     '[Провайдер]':  response.get('isp'),
-                     "[Организация]": response.get('org'),
-                     '[Страна]': response.get('country'),
-                     '[Регион]': response.get('regionName'),
-                     '[Город]': response.get('city'),
-                     '[Почтовый код]': response.get('zip'),
-                     '[Широта]': response.get('lat'),
-                     '[Долгота]': response.get('lon')
-                }
-                for k, v in data.items():
-                    print(f'{k}:{v}')
-            except requests.exceptions.ConnectionError:
-                print("Произошла какая-то ошибка, попробуй снова, idk")
+                localdb.localdbsearch.local_db_srch(z=z)
+            except Exception as e:
+                print(e)
 
-        def main():
+        if vd == 4:
+            z = input('Введите информацию о таргете: ')
+            try:
+                localdb.localdbsearch.local_db_srch(z=z)
+            except Exception as e:
+                print(e)
+
+        if vd == 7:
             ip = input("Введите IP-адрес таргета: ")
-            get_info_by_ip(ip=ip)
-        if __name__ == '__main__':
-            main()
+            print(get_info_by_ip(ip=ip))
 
-    if vd == 5:
-        il = instaloader.Instaloader()
+        if vd == 5:
+            il = instaloader.Instaloader()
+            name = input("Введите username таргета: ")
 
-        name = input("Введите username таргета: ")
-        profile = instaloader.Profile.from_username(il.context, username=name)
-        print(f'Информация о профиле: {name}\n {profile.biography}\n Постов: {profile.mediacount}\nПодписчиков: {profile.followers}')
 
-    if vd == 20:
-        print("SHIROMU находится на стадии бета-теста и постоянно обновляется.")
-        print("Вскоре будут постепенно добавляться новые функции софта, ожидайте")
-        print("Данная версия абсолютно бесплатная, предназначена для общего использования и поиска информации по открытым"
-              " источникам")
-        print("Поиск может иногда занимать продолжительное время(от 1 до 5 минут).")
-        print( "Если у вас имеются какие-то вопросы/предложения, можете задать их в дискорд канале")
-        print("Для осуществления поиска по документам, ФИО/ФИ, почте, адресу вам необходимо прокинуть базу данных весом"
-              "в 5 гб. Ее вы можете взять в дискорд канале. ")
+            def inst_osint(username):
+                profile = instaloader.Profile.from_username(il.context, username=username)
+                print(
+                    f'Информация о профиле: {username}\n {profile.biography}\n Постов: {profile.mediacount}\nПодписчиков: {profile.followers}')
 
-    if vd == 8:
-        def get_ip_by_hostname():
+
+            print(inst_osint(username=name))
+
+        if vd == 20:
+            with open("aboutshiromu.txt", "r", encoding="utf-8") as file:
+                content = file.read()
+                print(content)
+
+        if vd == 8:
             hostname = input("Введите домен: ")
-            try:
-                return f"Сервис: {hostname}\nIP: {socket.gethostbyname(hostname)}"
-            except socket.gaierror as error:
-                return f"Произошла ошибка, попробуйте снова"
-        def main():
-            print(get_ip_by_hostname())
-        if __name__ == "__main__":
-            main()
+            print(get_ip_by_hostname(hostname=hostname))
 
-    if vd == 14:
+        if vd == 14:
+            print(indev_soon)
 
-        def SendMessage():
-            message = input("Паста для спама: ")
-            amount = input("Кол-во отправки: ")
-            time.sleep(4)
-
-            for i in range:
-                pass
-            while amount > 0:
-                amount -= 1
-                pyautogui.typewrite(message.strip())
-                pyautogui.press("enter")
-        SendMessage()
-
-    if vd == 9:
-        def is_port_open(host, port):
-            s = socket.socket()
-            try:
-                s.connect((host, port))
-            except:
-                return False
-            else:
-                return True
-        host = input("Введите IP таргета:")
-        print("Сканирование запущено, ожидайте...")
-        for port in range(1, 1025):
-            if is_port_open(host, port):
-                print(f"[+] {host}:{port} открыт")
-            else:
-                print(f"[!] {host}:{port} закрыт", end="\r")
-
-    if vd == 26:
-        faker = Faker('RU')
-        name = faker.name()
-        adress = faker.address()
-        email = faker.email()
-        job = faker.job()
-        phone = faker.phone_number()
-        pasport = faker.passport_number()
-        print(f'Имя: {name}\nАдрес:{adress}\nЭл.почта:{email}\nНомер телефона:{phone}\nРабота:{job}\nПаспорт:{pasport}')
-
-    if vd == 52:
-        print('Доступно в платной версии SHIROMU')
-
-    if vd == 6:
-        query = input("Введите ФИО: ")
-        found2 = False
-        with open('freedb1.txt', 'r') as file:
-            for line in file:
-                if query in line:
-                    print(line)
-                    found2 = True
-        if found2 is False:
-            print("информации еще нет в базе данных, или что то введено не корректно ")
-
-    if vd == 15:
-        phone = int(input("Введите номер таргета(без+): "))
-        args = Namespace(country='ALL', phone=phone, time=20, threads=4, timeout=10, proxy=False)
-        args.time += time.time()
-
-        attack_threads = {}
-        bombers = {}
-        bomber_id = 1234567890
+        if vd == 9:
+            def is_port_open(host, port):
+                s = socket.socket()
+                try:
+                    s.connect((host, port))
+                except:
+                    return False
+                else:
+                    return True
 
 
-        def attack_thread_runner(args):
-            bomber = SMSCallBomber(args)
-            bombers[bomber_id] = bomber
-            bomber.run()
+            host = input("Введите IP таргета:")
+            print("Сканирование запущено, ожидайте...")
+            for port in range(1, 1025):
+                if is_port_open(host, port):
+                    print(f"[+] {host}:{port} открыт")
+                else:
+                    print(f"[!] {host}:{port} закрыт", end="\r")
+
+        if vd == 26:
+            create_fake_paste.generate_fake_paste()
+
+        if vd == 6:
+            print(indev_soon)
+
+        if vd == 15:
+            phone = int(input("Введите номер таргета(без+): "))
+            args = Namespace(country='ALL', phone=phone, time=20, threads=4, timeout=10, proxy=False)
+            args.time += time.time()
+
+            attack_threads = {}
+            bombers = {}
+            bomber_id = 1234567890
 
 
-        attack_threads = threading.Thread(target=attack_thread_runner, args=(args,))
-        attack_threads.start()
-
-        attack_threads.join(0)
-        del attack_threads
-        time.sleep(10)
-        bomber = bombers[bomber_id]
-        bomber.stop()
-        successful, failed = bomber.send_report()
-        print(f"Сообщений отправлено: {successful}")
-        print(f"Не удалось отправить: {failed}")
-
-        time.sleep(10)
-        bomber = bombers[bomber_id]
-        successful, failed = bomber.send_report()
-        print(f"Сообщений отправлено: {successful}")
-        print(f"Не удалось отправить: {failed}")
-
-    if vd == 21:
-
-        print(Fore.RED + "[81] Стартовый мануал по ОСИНТУ")
-        print(Fore.RED + "[82] Мануал по сносу тг")
-        print(Fore.RED + "[83] Мануал по сносу тгк")
-
-        vibor = int(input("Выберите мануал: "))
-
-        if vibor == 81:
-            with open("OSINT.txt", "r", encoding="utf-8") as file:
-                osint = file.read()
-                print(osint)
-        if vibor == 82:
-            with open("snostg.txt", 'r', encoding='utf-8') as file:
-                snostg = file.read()
-                print(snostg)
-        if vibor == 83:
-            with open('snostgc.txt', 'r', encoding='utf-8') as file:
-                snostgc = file.read()
-                print(snostgc)
-    if vd == 91:
-        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
-
-    if vd == 16:
-        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
-    if vd == 17:
-        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
-    if vd == 18:
-        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
-    if vd == 78:
-        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
-
-    if vd == 93:
-        print("Доступно в платной версии SHIROMU, за покупкой пишите Широ")
-
-    if vd == 27:
-        API = 'https://www.1secmail.com/api/v1/'
-        domains = ["1secmail.com", "1secmail.org", "1secmail.net", "wwjmp.com", "esiix.com", "xojxe.com", "yoggm.com"]
-        domain = random.choice(domains)
+            def attack_thread_runner(args):
+                bomber = SMSCallBomber(args)
+                bombers[bomber_id] = bomber
+                bomber.run()
 
 
-        def create_username():
-            usrname = string.ascii_lowercase + string.digits
-            username = ''.join(random.choice(usrname) for i in range(10))
-            return username
+            attack_threads = threading.Thread(target=attack_thread_runner, args=(args,))
+            attack_threads.start()
+
+            attack_threads.join(0)
+            del attack_threads
+            time.sleep(10)
+            bomber = bombers[bomber_id]
+            bomber.stop()
+            successful, failed = bomber.send_report()
+            print(f"Сообщений отправлено: {successful}")
+            print(f"Не удалось отправить: {failed}")
+
+            time.sleep(10)
+            bomber = bombers[bomber_id]
+            successful, failed = bomber.send_report()
+            print(f"Сообщений отправлено: {successful}")
+            print(f"Не удалось отправить: {failed}")
+
+        if vd == 21:
+
+            print(Fore.RED + "[81] Стартовый мануал по ОСИНТУ")
+            print(Fore.RED + "[82] Мануал по сносу тг")
+            print(Fore.RED + "[83] Мануал по сносу тгк")
+
+            vibor = int(input("Выберите мануал: "))
+
+            if vibor == 81:
+                with open("OSINT.txt", "r", encoding="utf-8") as file:
+                    osint = file.read()
+                    print(osint)
+            if vibor == 82:
+                with open("snostg.txt", 'r', encoding='utf-8') as file:
+                    snostg = file.read()
+                    print(snostg)
+            if vibor == 83:
+                with open('snostgc.txt', 'r', encoding='utf-8') as file:
+                    snostgc = file.read()
+                    print(snostgc)
+
+        if vd == 27:
+            API = 'https://www.1secmail.com/api/v1/'
+            domains = ["1secmail.com", "1secmail.org", "1secmail.net", "wwjmp.com", "esiix.com", "xojxe.com",
+                       "yoggm.com"]
+            domain = random.choice(domains)
 
 
-        def check_mail(mail=''):
-            req_link = f'{API}?action=getMessages&login={mail.split("@")[0]}&domain={mail.split("@")[1]}'
-            r = requests.get(req_link).json()
-            leghth = len(r)
-
-            if leghth == 0:
-                print('Пусто :(, обновляется каждые 5 сек')
-            else:
-                id_list = []
-
-                for i in r:
-                    for k, v in i.items():
-                        if k == 'id':
-                            id_list.append(v)
-                print(f'{leghth} сообщений. Обновляется каждые 5 сек')
-                current_dir = os.getcwd()
-                final_dir = os.path.join(current_dir, 'all_mails')
-                if not os.path.exists(final_dir):
-                    os.makedirs(final_dir)
-
-                for i in id_list:
-                    read_msg = f'{API}?action=readMessage&login={mail.split("@")[0]}&domain={mail.split("@")[1]}&id={i}'
-                    r = requests.get(read_msg).json()
-
-                    sender = r.get('from')
-                    subject = r.get('subject')
-                    date = r.get('date')
-                    content = r.get('textBody')
-
-                    mail_file_path = os.path.join(final_dir, f'{i}.txt')
-
-                    with open(mail_file_path, 'w') as file:
-                        file.write(
-                            f'Отправитель: {sender}\nНа анон почту: {mail}\nФайлы: {subject}\nДата: {date}\nСодержимое:{content}')
+            def create_username():
+                usrname = string.ascii_lowercase + string.digits
+                username = ''.join(random.choice(usrname) for i in range(10))
+                return username
 
 
-        def main():
-            try:
-                username = create_username()
-                mail = f'{username}@{domain}'
-                print(f'Временная анон почта: {mail}')
+            def check_mail(mail=''):
+                req_link = f'{API}?action=getMessages&login={mail.split("@")[0]}&domain={mail.split("@")[1]}'
+                r = requests.get(req_link).json()
+                leghth = len(r)
 
-                mail_req = requests.get(f'{API}?login={mail.split("@")[0]}&domain={mail.split("@")[1]}')
+                if leghth == 0:
+                    print('Пусто :(, обновляется каждые 5 сек')
+                else:
+                    id_list = []
 
-                while True:
-                    check_mail(mail=mail)
-                    time.sleep(5)
+                    for i in r:
+                        for k, v in i.items():
+                            if k == 'id':
+                                id_list.append(v)
+                    print(f'{leghth} сообщений. Обновляется каждые 5 сек')
+                    current_dir = os.getcwd()
+                    final_dir = os.path.join(current_dir, 'all_mails')
+                    if not os.path.exists(final_dir):
+                        os.makedirs(final_dir)
 
-            except(KeyboardInterrupt):
-                print("Прервано")
+                    for i in id_list:
+                        read_msg = f'{API}?action=readMessage&login={mail.split("@")[0]}&domain={mail.split("@")[1]}&id={i}'
+                        r = requests.get(read_msg).json()
+
+                        sender = r.get('from')
+                        subject = r.get('subject')
+                        date = r.get('date')
+                        content = r.get('textBody')
+
+                        mail_file_path = os.path.join(final_dir, f'{i}.txt')
+
+                        with open(mail_file_path, 'w') as file:
+                            file.write(
+                                f'Отправитель: {sender}\nНа анон почту: {mail}\nФайлы: {subject}\nДата: {date}\nСодержимое:{content}')
 
 
-        if __name__ == '__main__':
-            main()
+            def main():
+                try:
+                    username = create_username()
+                    mail = f'{username}@{domain}'
+                    print(f'Временная анон почта: {mail}')
 
-    if vd == 19:
-        print(Fore.BLUE + "            ┌────────────────────┐                        ┌─────────────┐" + Fore.RESET)
-        print(Fore.BLUE + "  ┬─────────┤ Информация/полезное├─────────┬──────────────┤ Анонимность ├┴─│" + Fore.RESET)
-        print(Fore.BLUE + "  │         └────────────────────┘         │              └─────────────┘  │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [20] Информация о софте               ├─ [26] Создание фейк-личности  │ " + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [21] Мануалы                          ├─ [27] Временная анон-почта    │ " + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [22] В разработке...                  ├─ [28] В разработке...         │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [23] В разработке...                  ├─ [29] В разработке...         │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [24] В разработке...                  ├─ [30] В разработке...         │" + Fore.RESET)
-        print(Fore.BLUE + "  └─ [25] В разработке...                  ├─ [11] Следующая страница ->   │ " + Fore.RESET)
+                    mail_req = requests.get(f'{API}?login={mail.split("@")[0]}&domain={mail.split("@")[1]}')
+
+                    while True:
+                        check_mail(mail=mail)
+                        time.sleep(5)
+
+                except(KeyboardInterrupt):
+                    print("Прервано")
 
 
-    if vd == 31:
-        def doxbin_parser(url):
-            if requests.get(url).status_code == 404:
-                print('Ничего не найдено')
+            if __name__ == '__main__':
+                main()
 
-            else:
-                siilka = requests.get(url)
-                soup = BeautifulSoup(siilka.text, 'html.parser')
-                dox = soup.find_all('div')
-                for text1 in dox:
-                    print(text1.text)
+        if vd == 19:
+            banner2.banner_two()
 
-        if __name__ == '__main__':
+        if vd == 31:
             while True:
                 name_pasta = input('Введите информацию, которую вы уже знаете о таргете: ').replace(
                     '_', '')
@@ -388,32 +249,20 @@ while True:
                 if name_pasta == '':
                     print('Некорректно введена информация... ')
                 else:
-                    doxbin_parser(f'https://doxbin.org/upload/{name_pasta}')
+                    all_parsers.doxbin_parser(f'https://doxbin.org/upload/{name_pasta}')
 
-    if vd == 30:
-        print_darklist(darklist)
+        if vd == 30:
+            print_darklist(darklist)
 
-    if vd == 32:
-        doxpastecreate.main()
+        if vd == 32:
+            doxpastecreate.main()
 
-    if vd == 11:
-        print(Fore.BLUE + "            ┌────────────────────┐                        " + Fore.RESET)
-        print(Fore.BLUE + "  ┬─────────┤     OSINT VK       ├──────────────────────│────────[УРОН ВК]──────────│" + Fore.RESET)
-        print(Fore.BLUE + "  │         └────────────────────┘                      ├─  [33] Снос за оск        │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [22] Проверить время онлайна и устройства          ├─  [34] Снос своим текстом │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [23] Id групп пользователя(за все время)           ├─                          │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [24] Id Фотографий таргета                         ├─                          │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [25] Id Страниц друзей жертвы                      ├─                          │" + Fore.RESET)
-        print(Fore.BLUE + "  ├─ [28] Посмотреть комментарии таргета                ├─                          │" + Fore.RESET)
-        print(Fore.BLUE + "  └─ [29] Поиск номера телефона                         ├─                          │" + Fore.RESET)
+        if vd == 11:
+            banner3.banner_three()
 
+        if vd in [91, 16, 17, 18, 78, 93, 33, 34, 22, 29, 52]:  # 52, 22
+            print(ifv)
 
-
-    if vd in range(22, 29):
-        print('Доступно в полной версии SHIROMU, подробнее пишите sh1ro в discord')
-
-    elif vd == 33:
-        print('Доступно в полной версии SHIROMU, подробнее пишите sh1ro в discord')
-
-    elif vd == 34:
-        print('Доступно в полной версии SHIROMU, подробнее пишите sh1ro в discord')
+    except Exception as e:
+        print('Что-то не так, возвращаю в главное меню, пожалуйста, сообщите Sh1ro об ошибке...')
+        continue
