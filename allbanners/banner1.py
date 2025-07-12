@@ -5,7 +5,8 @@ def banner_one():
     tprint("SHIROMU")
 
     print(Fore.BLUE + "├─ Разработчик - Sh1ro " + Fore.RESET)
-    print(Fore.BLUE + "├─ Discord - https://discord.gg/ZAfg7YxSVE" + Fore.RESET)
+    print(Fore.BLUE + "├─ Discord - https://discord.gg/zVveNGENS5" + Fore.RESET)
+    print(Fore.BLUE + "├─ Telegram - t.me/korablperehod" + Fore.RESET)
     print(Fore.BLUE + "├─ Если вы хотите выйти из софта обратно в терминал, просто нажмите 0")
     print(
         Fore.BLUE + "├─          ┌─────────────────┐                        ┌───────────────────┐                           ┌───────────┐            │" + Fore.RESET)
