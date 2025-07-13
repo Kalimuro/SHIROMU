@@ -32,7 +32,11 @@ def banner_one():
         Fore.BLUE + "  ├  [32] Составить итоговую пасту      ├                                                 ├─ [93] Снос через сайт" + Fore.RESET)
     print(
         Fore.BLUE + "  ├─ [06] Поиск по ФИО                  ├─ [12] В разработке...                           └─ [19] след.страница ->>" + Fore.RESET)
-    print(Fore.BLUE + "  └─ [52] Поиск по никнейму" + Fore.RESET)
-    print(Fore.BLUE + "                                        └─ [13] В разработке...                 ")
+    print(
+        Fore.BLUE + "  ├─ [13] Поиск с использованием Telegram" + Fore.RESET)
+
+    print(Fore.BLUE + "└─ [52] Поиск по никнейму" + Fore.RESET)
+
+
 
 

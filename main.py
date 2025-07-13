@@ -1,5 +1,8 @@
+import asyncio
+
 import localdb.localdbsearch
 import utils.phonenumber_search as pn
+from utils.Telegram_connect import run_bot_flow
 from utils.imports import *
 from utils import doxpastecreate
 from utils.darklinks import *
@@ -87,6 +90,18 @@ while True:
         if vd == 8:
             hostname = input("Введите домен: ")
             print(get_ip_by_hostname(hostname=hostname))
+
+        if vd == 13:
+            async def main_flow():
+                hasssh = input('Введите api_hash telegram-аккаунта: ')
+                iddd = int(input('Введите api_id: '))
+                msg_txt = input('Введите текст сообщения: ')
+
+                await run_bot_flow(iddd, hasssh, msg_txt)
+
+
+            if __name__ == "__main__":
+                asyncio.run(main_flow())
 
         if vd == 14:
             print(indev_soon)
