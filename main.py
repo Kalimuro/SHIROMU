@@ -1,5 +1,5 @@
 import asyncio
-
+from utils import metasearch
 import localdb.localdbsearch
 import utils.phonenumber_search as pn
 from utils.Telegram_connect import run_bot_flow
@@ -58,6 +58,14 @@ while True:
             except Exception as e:
                 print(e)
 
+        if vd == 3:
+            print("Перед началом использования, пожалуйста, добавьте изображения в директорию imgs, спасибо")
+            try:
+                script_dir = os.path.dirname(os.path.abspath(__file__))
+                directory = os.path.join(script_dir, "imgs")
+                metasearch.process_images_in_directory(directory)
+            except Exception as e:
+                print(e)
         if vd == 4:
             z = input('Введите информацию о таргете: ')
             try:
