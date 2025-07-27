@@ -418,7 +418,7 @@ Run the test suite using the following command:
 
 ##  License
 
-This project is protected under the [MIT-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [MIT-LICENSE](https://github.com/Kalimuro/SHIROMU/blob/master/LICENSE) file.
+This project is protected under the [MIT-LICENSE](https://choosealicense.com/licenses/mit/) License. For more details, refer to the [MIT-LICENSE](https://github.com/Kalimuro/SHIROMU/blob/master/LICENSE) file.
 
 ---
 
