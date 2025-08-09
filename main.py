@@ -100,16 +100,36 @@ while True:
             print(get_ip_by_hostname(hostname=hostname))
 
         if vd == 13:
-            async def main_flow():
-                hasssh = input('Введите api_hash telegram-аккаунта: ')
-                iddd = int(input('Введите api_id: '))
-                msg_txt = input('Введите текст сообщения: ')
+            async def main():
+                with open('sessions.txt', 'r') as f:
+                    auth = f.read()
+                    auth_api_id_nachalo = auth.find('api_id=') + len('api_id=')
+                    auth_api_id_konez = auth.find('\n', auth_api_id_nachalo)
+                    api_id_itog = auth[auth_api_id_nachalo:auth_api_id_konez].strip() if auth_api_id_nachalo != -1 else None
+                    api_hash_nach = auth.find('api_hash=') + len('api_hash=')
+                    api_hash_kon = auth.find('\n', api_hash_nach)
+                    if api_hash_kon == -1:
+                        api_hash_itog = auth[api_hash_nach:].strip()
+                    else:
+                        api_hash_itog = auth[api_hash_nach:api_hash_kon].strip()
+                print(api_id_itog)
+                print(api_hash_itog)
+                hasssh = api_hash_itog
+                iddd = api_id_itog
+                msg_txt = input('Введите информацию о таргете: ')
 
-                await run_bot_flow(iddd, hasssh, msg_txt)
-
+                ress = await run_bot_flow(iddd, hasssh, msg_txt)
+                print("\nИтоговые результаты:")
+                for bot, messages in ress.items():
+                    print(f"\n{bot}:")
+                    if messages:
+                        for msg in messages:
+                            print(f"- {msg}")
+                    else:
+                        print("Нет результатов")
 
             if __name__ == "__main__":
-                asyncio.run(main_flow())
+                asyncio.run(main())
 
         if vd == 14:
             print(indev_soon)
