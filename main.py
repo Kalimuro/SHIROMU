@@ -157,20 +157,7 @@ while True:
             create_fake_paste.generate_fake_paste()
 
         if vd == 52:
-            nick = input(f"Введите ник таргета: ")
-            print(f" Соц.сети:")
-            nicks.osint(nicks.snm, nick)
-            print(f"Видео/стрим платформы:")
-            nicks.osint(nicks.vh, nick)
-            print(f" Игры/игровые площадки:")
-            nicks.osint(nicks.games, nick)
-            print("Форумы:")
-            nicks.osint(nicks.forums, nick)
-            print(f" Кошельки:")
-            nicks.osint(nicks.money, nick)
-            print(f" Другое:")
-            nicks.osint(nicks.other, nick)
-
+            asyncio.run(nicks.main())
         if vd == 6:
             print(indev_soon)
 

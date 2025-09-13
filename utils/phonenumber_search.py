@@ -20,6 +20,7 @@ def get_phone_number_info(phone_number):
     print("Оператор: ", Carrier)
     print(x)
     print("Часовой пояс: ", timezone_list)
+    print("Регион:", Region)
 
     if valid:
         print("Номер валидный")
