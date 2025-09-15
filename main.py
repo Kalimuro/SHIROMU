@@ -157,7 +157,10 @@ while True:
             create_fake_paste.generate_fake_paste()
 
         if vd == 52:
-            asyncio.run(nicks.main())
+            try:
+                asyncio.run(nicks.main())
+            except KeyboardInterrupt:
+                print("\nВыход в главное меню...")
         if vd == 6:
             print(indev_soon)
 

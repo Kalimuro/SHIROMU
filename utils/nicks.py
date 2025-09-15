@@ -1,130 +1,137 @@
-import re
-import maigret
-from maigret.sites import MaigretDatabase
-
-MAIGRET_DB_FILE = 'data.json'
-COOKIES_FILE = "cookies.txt"
-id_type = "username"
-USERNAME_REGEXP = r'^[a-zA-Z0-9-_\.]{5,}$'
-
-TOP_SITES_COUNT = 1500
-TIMEOUT = 30
+import aiohttp
+import asyncio
+from urllib.parse import quote
+from g4f.client import Client
 
 
-class Logger_for_Maigret:
-    def debug(self, msg):
-        pass
+class UsernameSearch:
+    def __init__(self):
+        self.username = ""
+        self.results = {}
+        self.platforms = {
+            "Twitter": "https://twitter.com/",
+            "Instagram": "https://instagram.com/",
+            "Facebook": "https://facebook.com/",
+            "Reddit": "https://www.reddit.com/user/",
+            "LinkedIn": "https://linkedin.com/in/",
+            "TikTok": "https://tiktok.com/@",
+            "Pinterest": "https://pinterest.com/",
+            "VK": "https://vk.com/",
+            "Odnoklassniki": "https://ok.ru/",
+            "Flickr": "https://www.flickr.com/people/",
+            "GitHub": "https://github.com/",
+            "GitLab": "https://gitlab.com/",
+            "StackOverflow": "https://stackoverflow.com/users/",
+            "Bitbucket": "https://bitbucket.org/",
+            "Dev.to": "https://dev.to/",
+            "HackerRank": "https://hackerrank.com/",
+            "LeetCode": "https://leetcode.com/",
+            "Kaggle": "https://www.kaggle.com/",
+            "Steam": "https://steamcommunity.com/id/",
+            "Epic Games": "https://www.epicgames.com/account/",
+            "Xbox": "https://xboxgamertag.com/search/",
+            "PlayStation": "https://psnprofiles.com/",
+            "Roblox": "https://www.roblox.com/user.aspx?username=",
+            "Twitch": "https://twitch.tv/",
+            "Яндекс.Дзен": "https://zen.yandex.ru/user/",
+            "Habr": "https://habr.com/ru/users/",
+            "VC.ru": "https://vc.ru/u/",
+            "Pikabu": "https://pikabu.ru/@",
+            "Rutube": "https://rutube.ru/channel/",
+            "Telegram": "https://t.me/",
+            "Spotify": "https://open.spotify.com/user/",
+            "eBay": "https://www.ebay.com/usr/",
+            "Amazon": "https://www.amazon.com/gp/profile/amzn1.account.",
+            "Quora": "https://www.quora.com/profile/",
+            "Medium": "https://medium.com/@",
+            "Wikipedia": "https://en.wikipedia.org/wiki/User:"
+        }
 
-    def info(self, msg):
-        pass
+    async def check_platform(self, session, platform, url, username_variant):
+        try:
+            full_url = url + quote(username_variant)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                "Accept-Language": "en-US,en;q=0.9"
+            }
 
-    def warning(self, msg):
-        pass
+            async with session.get(full_url, headers=headers, timeout=6) as response:
+                if response.status == 200:
+                    text = await response.text()
 
-    def error(self, msg):
-        pass
+                    if not any(e in text.lower() for e in ["not found", "doesn't exist", "404", "error", "не найдено"]):
+                        variant_key = f"{platform} ({'@' if username_variant.startswith('@') else 'без @'})"
+                        self.results[variant_key] = full_url
+                        print(f"[+] {variant_key}: {full_url}")
 
-    def level(self, level):
-        pass
+        except Exception:
+            pass
 
+    async def search_all(self):
+        self.results = {}
+        print(f"\nПоиск аккаунтов для: {self.username}")
 
-async def maigret_search(username):
-    db = MaigretDatabase().load_from_path(MAIGRET_DB_FILE)
-    sites = db.ranked_sites_dict(top=TOP_SITES_COUNT)
+        connector = aiohttp.TCPConnector(limit=50, force_close=True)
+        timeout = aiohttp.ClientTimeout(total=30)
 
-    results = await maigret.search(
-        username=username,
-        site_dict=sites,
-        timeout=TIMEOUT,
-        logger=Logger_for_Maigret(),
-        id_type=id_type,
-        cookies=COOKIES_FILE,
-    )
-    return results
+        async with aiohttp.ClientSession(connector=connector, timeout=timeout) as session:
+            tasks = []
 
+            username_variants = [self.username, f"@{self.username}"]
 
-def format_results(found_sites):
-    if not found_sites:
-        return [], []
+            for platform, url in self.platforms.items():
+                for username_variant in username_variants:
+                    tasks.append(self.check_platform(session, platform, url, username_variant))
 
-    found_accounts = len(found_sites)
-    formatted_links = []
-    detailed_results = []
+            for i in range(0, len(tasks), 50):
+                await asyncio.gather(*tasks[i:i + 50])
 
-    for site, link in found_sites:
-        formatted_links.append(f'{site}: {link}')
-        detailed_results.append({'site': site, 'url': link})
+        print(f"\nНайдено аккаунтов: {len(self.results)}")
 
-    messages = []
-    current_message = f'{found_accounts} аккаунтов найдено:\n'
+    async def gpt_help(self):
+        if not self.results:
+            print("❌ Нет результатов для анализа.")
+            return
 
-    for link in formatted_links:
-        if len(current_message + link + '\n') > 4096:
-            messages.append(current_message.rstrip('\n'))
-            current_message = ''
-        current_message += link + '\n'
+        print("\n🤖 Анализирую результаты с помощью SHIROMU-helper...")
 
-    if current_message:
-        messages.append(current_message.rstrip('\n'))
+        try:
+            client = Client()
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "user", "content": f"Я OSINT-специалист, вот какие социальные сети удалось найти при "
+                                                f"поиске в открытых источниках для username {self.username}: {self.results}. "
+                                                f"Проанализируй найденные платформы и дай конкретные рекомендации "
+                                                f"для дальнейшего исследования: какие данные можно извлечь, "
+                                                f"какие связи установить, на что обратить особое внимание. "
+                                                f"Будь конкретен и предложи пошаговый план действий."}],
+                web_search=False
+            )
+            print("\n" + "=" * 80)
+            print("💡 РЕКОМЕНДАЦИИ SHIROMU-helper ДЛЯ ДАЛЬНЕЙШЕГО ИССЛЕДОВАНИЯ:")
+            print("=" * 80)
+            print(response.choices[0].message.content)
+            print("=" * 80)
 
-    return messages, detailed_results
-
-
-async def search(username):
-    try:
-        results = await maigret_search(username)
-    except Exception as e:
-        print(f"Ошибка, пишите Shiro")
-        return [], []
-
-    found_exact_accounts = []
-
-    for site, data in results.items():
-        if data.get('url_user'):
-            found_exact_accounts.append((site, data['url_user']))
-        elif data.get('exists', False):
-            url = data.get('url', f'https://{site}.com/{username}')
-            found_exact_accounts.append((site, url))
-
-    if not found_exact_accounts:
-        return [], []
-
-    messages, detailed_results = format_results(found_exact_accounts)
-    return messages, detailed_results
+        except Exception as e:
+            print(f"❌ Ошибка при обращении к SHIROMU-helper")
 
 
 async def main():
+    searcher = UsernameSearch()
+
     while True:
-        try:
-            username = input("Введите никнейм:").strip().lstrip('@')
+        username = input("\nВведите никнейм: ").strip()
 
-            if username.lower() == 'quit':
-                break
+        if username:
+            if username.startswith('@'):
+                username = username[1:]
 
-            username_regexp = re.search(USERNAME_REGEXP, username)
-            if not username_regexp:
-                print("Неправильно введен username. Username должен содержать > 4 символов.")
-                continue
+            searcher.username = username
+            await searcher.search_all()
 
-            print(f'Поиск по: {username}...')
+            await searcher.gpt_help()
 
-            messages, detailed_results = await search(username)
-
-            if not messages:
-                print('Аккаунты не найдены')
-            else:
-                for message in messages:
-                    print(message)
-
-                print(f'\nНайдено {len(detailed_results)} аккаунтов:')
-                for result in detailed_results:
-                    print(f"  {result['site']}: {result['url']}")
-
-            print('-' * 50)
-
-        except KeyboardInterrupt:
-            print("\nExiting...")
-            break
-        except Exception as e:
-            print(f'Ошибка, пишите Sh1ro')
-
+        else:
+            print("Ошибка: введите никнейм")
