@@ -40,6 +40,23 @@ def get_phone_number_info(phone_number):
     print("Упоминания в соцсетях: https://cse.google.com/cse?cx=006976128084956795641:ad1xj14zfap&q=" + phone_number)
     print("Дополнительная информация: https://search.0t.rocks/records?phoneNumbers=" + phone_number)
 
+    info1 = [
+        f"Номер телефона: {phone_number}\n"
+        f"Часовой пояс: {timezone_list}\n"
+        f"Оператор: {Carrier}\n"
+        f"Регион: {Region}\n"
+        f"Валидный: {valid}\n"
+        f"Активный/нет: {possible}"
+        f"Telegram: t.me/ + {phone_number}",
+        f"WhatsApp: wa.me/ + {phone_number}",
+        f"Вайбер: viber.click/ + {phone_number}",
+        f"Фэйсбук: m.me/ + {phone_number}",
+        f"Возможные имена: gogtc.co/search/ + {phone_number}",
+        f"Упоминания в соцсетях: https://cse.google.com/cse?cx=006976128084956795641:ad1xj14zfap&q= + {phone_number}",
+        f"Дополнительная информация: https://search.0t.rocks/records?phoneNumbers= + {phone_number}"
+    ]
+    return info1
+
 
 def for_windows(phone_number):
     x = phonenumbers.parse(phone_number, "RU")

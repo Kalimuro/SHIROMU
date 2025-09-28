@@ -18,4 +18,4 @@ def banner_three():
     print(
         Fore.BLUE + "  ├─ [28] Посмотреть комментарии таргета                ├─                          │" + Fore.RESET)
     print(
-        Fore.BLUE + "  └─ [29] Поиск номера телефона                         ├─                          │" + Fore.RESET)
+        Fore.BLUE + "  └─ [29] Поиск номера телефона                         ├─[35] След.страница ->     │" + Fore.RESET)

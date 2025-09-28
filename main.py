@@ -1,8 +1,13 @@
 import asyncio
+import re
+
+import utils.discord_osint
+from utils.shiromu_helper import shhelper_help
 from utils import metasearch
 import localdb.localdbsearch
 import utils.phonenumber_search as pn
 from utils.Telegram_connect import run_bot_flow
+from utils.email_search import search_email_lullar_simple, print_results, search_email_lullar_advanced
 from utils.imports import *
 from utils import doxpastecreate
 from utils.darklinks import *
@@ -10,10 +15,12 @@ from Config.func_comments_return import *
 from utils.ip_osint import get_info_by_ip, get_ip_by_hostname
 from utils import create_fake_paste
 from utils import all_parsers
-from allbanners import banner1, banner2, banner3
+from allbanners import banner1, banner2, banner3, banner4
 from smscallbomber import SMSCallBomber
 from localdb import *
 from utils import nicks
+from utils.discord_osint import get_discord_user_info, get_info_by_dsid, get_all_nicknames, get_nicks_by_id, \
+    get_friends_by_id, sobitiya_usera, format_events, voice_history, format_voice_history
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -49,8 +56,8 @@ while True:
 
         if vd == 1:
             phone_number = input("Введите номер телефона(формат: +79304669445): ")
-            pn.get_phone_number_info(phone_number)
-
+            res = pn.get_phone_number_info(phone_number)
+            shhelper_help(results=res)
         if vd == 2:
             z = input('Введите информацию о таргете: ')
             try:
@@ -75,7 +82,11 @@ while True:
 
         if vd == 7:
             ip = input("Введите IP-адрес таргета: ")
-            print(get_info_by_ip(ip=ip))
+            results = get_info_by_ip(ip=ip)
+            if results:
+                shhelper_help(results=results)
+            else:
+                print("Не удалось получить информацию по IP")
 
         if vd == 5:
             il = instaloader.Instaloader()
@@ -105,7 +116,8 @@ while True:
                     auth = f.read()
                     auth_api_id_nachalo = auth.find('api_id=') + len('api_id=')
                     auth_api_id_konez = auth.find('\n', auth_api_id_nachalo)
-                    api_id_itog = auth[auth_api_id_nachalo:auth_api_id_konez].strip() if auth_api_id_nachalo != -1 else None
+                    api_id_itog = auth[
+                                  auth_api_id_nachalo:auth_api_id_konez].strip() if auth_api_id_nachalo != -1 else None
                     api_hash_nach = auth.find('api_hash=') + len('api_hash=')
                     api_hash_kon = auth.find('\n', api_hash_nach)
                     if api_hash_kon == -1:
@@ -127,6 +139,7 @@ while True:
                             print(f"- {msg}")
                     else:
                         print("Нет результатов")
+
 
             if __name__ == "__main__":
                 asyncio.run(main())
@@ -309,7 +322,95 @@ while True:
         if vd == 11:
             banner3.banner_three()
 
-        if vd in [91, 16, 17, 18, 78, 93, 33, 34, 22, 29, 52]:  # 52, 22
+        if vd == 10:
+            email = input("Введите email для поиска: ").strip()
+
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                print("❌ Введите корректный email адрес!")
+            else:
+                print(f"🔍 Ищем соцсети для: {email}")
+
+                results = search_email_lullar_simple(email)
+                print_results(results, email)
+
+                if results:
+                    shhelper_help(results=results)
+                if not results:
+                    print("Пробуем альтернативный метод поиска...")
+                    results = search_email_lullar_advanced(email)
+                    print_results(results, email)
+
+        if vd == 35:
+            banner4.banner_four()
+
+        if vd == 38:
+            username = input("Введите Discord username/ID таргета: ")
+            result = get_discord_user_info(username)
+            print(result)
+            shhelper_help(results=result)
+
+        if vd == 37:
+            user_id = input("Введите Discord ID таргета: ").strip()
+
+            if user_id:
+                result = get_info_by_dsid(user_id)
+            else:
+                result = get_info_by_dsid(user_id)
+
+            if result:
+                print("\n📋 ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ:")
+                print(f"Discord ID: {result['discord_id']}")
+                print(f"Всего серверов: {result['total_servers']}")
+                print(f"Текущих серверов: {len(result['current_servers'])}")
+                print(f"Покинутых серверов: {len(result['left_servers'])}")
+
+                if result['current_servers']:
+                    print("\n🏠 ТЕКУЩИЕ СЕРВЕРА:")
+                    for server in result['current_servers']:
+                        print(f"  - {server['name']} (ID: {server['id']})")
+            shhelper_help(results=result)
+
+        if vd == 39:
+            user_id = input("Введите Discord ID таргета: ").strip()
+
+            result = get_nicks_by_id(user_id)
+
+            if result:
+                print("\n📋 ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ:")
+                print(f"Discord ID: {result['discord_id']}")
+                print(f"Всего никнеймов: {result['total_count']}")
+
+                unique_servers = set()
+                for nick in result['nicknames']:
+                    if nick.get('guild'):
+                        unique_servers.add(nick['guild']['name'])
+
+                print(f"Уникальных серверов: {len(unique_servers)}")
+
+                if result['has_next_page']:
+                    print("\n🔄 Получение всех никнеймов...")
+                    all_nicks = get_all_nicknames(user_id)
+                    print(f"Все nicknames: {len(all_nicks)}")
+            shhelper_help(results=result)
+
+        if vd == 40:
+            us_id = input('Введите discord ID таргета:')
+            get_friends_by_id(user_id=us_id)
+
+        if vd == 41:
+            us_id = input('Введите discord ID таргета:')
+            res = sobitiya_usera(user_id=us_id)
+
+        if vd == 42:
+            us_id = input('Введите discord ID таргета:')
+            res = voice_history(user_id=us_id)
+            url = f'https://discord-sensor.com/api/users/get-latest-events/{us_id}?subTab=voice_history&limit=20&page=1'
+            response = requests.get(url)
+            data = response.json()
+            dlya_helpera = format_voice_history(data)
+            shhelper_help(results=dlya_helpera)
+
+        if vd in [91, 16, 17, 18, 78, 93, 33, 34, 22, 29, 52]:  # 22
             print(ifv)
 
     except Exception as e:

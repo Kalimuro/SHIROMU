@@ -21,7 +21,7 @@ def banner_one():
     print(
         Fore.BLUE + "  ├─ [03] Поиск метаданных по фото      ├─ [09] Сканирование портов                       ├─ [16] Снос тг аккаунтов" + Fore.RESET)
     print(
-        Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [10] В разработке...                           ├─ [17] Снос тгк" + Fore.RESET)
+        Fore.BLUE + "  ├─ [04] Поиск по адресу               ├─ [xx] В разработке...                           ├─ [17] Снос тгк" + Fore.RESET)
     print(
         Fore.BLUE + "  ├─ [05] Поиск по Instagram            ├─ [11] В разработке...                           ├─ [18] Снос сессии" + Fore.RESET)
     print(
@@ -34,6 +34,8 @@ def banner_one():
         Fore.BLUE + "  ├─ [06] Поиск по ФИО                  ├─ [12] В разработке...                           └─ [19] след.страница ->>" + Fore.RESET)
     print(
         Fore.BLUE + "  ├─ [13] Поиск с использованием Telegram" + Fore.RESET)
+    print(
+        Fore.BLUE + "  ├─ [10] Поиск по email" + Fore.RESET)
 
     print(Fore.BLUE + "└─ [52] Поиск по никнейму" + Fore.RESET)
 
